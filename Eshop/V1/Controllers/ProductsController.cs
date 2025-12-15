@@ -1,7 +1,8 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
-using Eshop.Domains;
 using Eshop.Application.Interfaces;
+using Eshop.Domains;
+using Eshop.V1.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.V1.Controllers;
 
@@ -31,5 +32,22 @@ public class ProductsController : ControllerBase
             return NotFound();
 
         return Ok(product);
+    }
+
+    [HttpPatch("{id:int}/description")]
+    public IActionResult UpdateDescription(
+    int id,
+    [FromBody] UpdateProductDescriptionRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Description))
+            return BadRequest("Description cannot be empty.");
+
+        var product = _repository.GetById(id);
+        if (product is null)
+            return NotFound();
+
+        _repository.UpdateDescription(id, request.Description);
+
+        return NoContent();
     }
 }
