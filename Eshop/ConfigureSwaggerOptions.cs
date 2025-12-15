@@ -1,4 +1,4 @@
-﻿namespace ApiVersioning.Examples;
+﻿namespace Eshop;
 
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,7 +1,10 @@
-using ApiVersioning.Examples;
 using Asp.Versioning;
+using Eshop;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Eshop.Application.Interfaces;
+using Eshop.Infrastructure.Repositories;
+
 
 [assembly: Microsoft.AspNetCore.Mvc.ApiController]
 
@@ -11,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
+builder.Services.AddScoped<IProductRepository, MockProductRepository>();
 builder.Services.AddApiVersioning(
                     options =>
                     {
@@ -74,7 +78,6 @@ if (app.Environment.IsDevelopment())
        });
 }
 
-app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

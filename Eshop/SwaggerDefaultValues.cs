@@ -1,4 +1,4 @@
-﻿namespace ApiVersioning.Examples;
+﻿namespace Eshop;
 
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
