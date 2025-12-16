@@ -1,9 +1,11 @@
 using Asp.Versioning;
 using Eshop;
+using Eshop.Application.Interfaces;
+using Eshop.Infrastructure.Data;
+using Eshop.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Eshop.Application.Interfaces;
-using Eshop.Infrastructure.Repositories;
 
 
 [assembly: Microsoft.AspNetCore.Mvc.ApiController]
@@ -14,7 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddScoped<IProductRepository, MockProductRepository>();
+//builder.Services.AddScoped<IProductRepository, MockProductRepository>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IProductRepository, EfProductRepository>();
+
 builder.Services.AddApiVersioning(
                     options =>
                     {
