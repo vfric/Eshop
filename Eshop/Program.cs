@@ -16,11 +16,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-//builder.Services.AddScoped<IProductRepository, MockProductRepository>();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IProductRepository, EfProductRepository>();
+var useMock = builder.Configuration.GetValue<bool>("UseMockRepository");
+if (useMock)
+{
+    builder.Services.AddScoped<IProductRepository, MockProductRepository>();
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    builder.Services.AddScoped<IProductRepository, EfProductRepository>();
+}
 
 builder.Services.AddApiVersioning(
                     options =>
