@@ -5,41 +5,41 @@ using Xunit;
 public class ProductRepositoryTests
 {
     [Fact]
-    public void GetAll_ReturnsProducts()
+    public async Task GetAll_ReturnsProducts()
     {
         // arrange
         IProductRepository repository = new MockProductRepository();
 
         // act
-        var products = repository.GetAll();
+        var products = await repository.GetAllAsync();
 
         // assert
         Assert.NotEmpty(products);
     }
 
     [Fact]
-    public void GetById_ReturnsProduct()
+    public async Task GetById_ReturnsProduct()
     {
         // arrange
         IProductRepository repository = new MockProductRepository();
 
         // act
-        var product = repository.GetById(1);
+        var product = await repository.GetByIdAsync(1);
 
         // assert
-        Assert.Equal(1, product.Id);
+        Assert.Equal(1, product!.Id);
     }
 
     [Fact]
-    public void UpdateDescription_ExistingProduct_UpdatesDescription()
+    public async Task UpdateDescription_ExistingProduct_UpdatesDescription()
     {
         // arrange
         IProductRepository repository = new MockProductRepository();
         var newDescription = "Updated description";
 
         // act
-        repository.UpdateDescription(1, newDescription);
-        var updatedProduct = repository.GetById(1);
+        await repository.UpdateDescriptionAsync(1, newDescription);
+        var updatedProduct = await repository.GetByIdAsync(1);
 
         // assert
         Assert.NotNull(updatedProduct);
@@ -47,12 +47,15 @@ public class ProductRepositoryTests
     }
 
     [Fact]
-    public void GetById_UnknownId_ReturnsNull()
+    public async Task GetById_UnknownId_ReturnsNull()
     {
+        // arrange
         IProductRepository repository = new MockProductRepository();
 
-        var product = repository.GetById(999999);
+        // act
+        var product = await repository.GetByIdAsync(999999);
 
+        // assert
         Assert.Null(product);
     }
 }

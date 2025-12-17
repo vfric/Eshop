@@ -6,7 +6,8 @@ namespace Eshop.Application.Interfaces;
 /// </summary>
 public interface IProductRepository
 {
-    IEnumerable<Product> GetAll();
-    Product? GetById(int id);
-    void UpdateDescription(int id, string description);
+    Task<(List<Product>, int)> GetAllAsync(int page, int pageSize);
+    Task<List<Product>> GetAllAsync();
+    Task<Product?> GetByIdAsync(int id);
+    Task UpdateDescriptionAsync(int id, string description);
 }

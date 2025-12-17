@@ -19,15 +19,15 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Product>> GetAll()
+    public async Task<ActionResult<IEnumerable<Product>>> GetAll()
     {
-        return Ok(_repository.GetAll());
+        return Ok(await _repository.GetAllAsync());
     }
 
     [HttpGet("{id:int}")]
-    public ActionResult<Product> GetById(int id)
+    public async Task<ActionResult<Product>> GetById(int id)
     {
-        var product = _repository.GetById(id);
+        var product = await _repository.GetByIdAsync(id);
         if (product == null)
             return NotFound();
 
@@ -35,19 +35,19 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPatch("{id:int}/description")]
-    public IActionResult UpdateDescription(
+    public async Task<ActionResult<IEnumerable<Product>>> UpdateDescription(
     int id,
     [FromBody] UpdateProductDescriptionRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Description))
             return BadRequest("Description cannot be empty.");
 
-        var product = _repository.GetById(id);
+        var product = await _repository.GetByIdAsync(id);
         if (product is null)
             return NotFound();
 
-        _repository.UpdateDescription(id, request.Description);
+        await _repository.UpdateDescriptionAsync(id, request.Description);
 
-        return NoContent();
+        return Ok(product);
     }
 }

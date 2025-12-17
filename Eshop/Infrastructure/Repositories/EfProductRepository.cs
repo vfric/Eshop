@@ -14,23 +14,39 @@ public class EfProductRepository : IProductRepository
         _context = context;
     }
 
-    public IEnumerable<Product> GetAll()
+    public async Task<List<Product>> GetAllAsync()
     {
-        return _context.Products.AsNoTracking().ToList();
+        return await _context.Products
+            .AsNoTracking()
+            .ToListAsync();
     }
 
-    public Product? GetById(int id)
+    public async Task<(List<Product>, int)> GetAllAsync(int page, int pageSize)
     {
-        return _context.Products.Find(id);
+        var products = await _context.Products
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var productCount = await _context.Products
+            .CountAsync();
+
+        return (products, productCount);
     }
 
-    public void UpdateDescription(int id, string description)
+    public async Task<Product?> GetByIdAsync(int id)
     {
-        var product = _context.Products.Find(id);
+        return await _context.Products.FindAsync(id);
+    }
+
+    public async Task UpdateDescriptionAsync(int id, string description)
+    {
+        var product = await _context.Products.FindAsync(id);
         if (product == null)
             return;
 
         product.Description = description;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }
