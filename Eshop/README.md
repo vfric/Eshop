@@ -90,10 +90,22 @@ Options
 ### Steps
 1. Clone the repository
 2. Open the solution in Visual Studio
-3. Run the application
-4. Open Swagger UI in the browser (http://localhost:{port}/swagger)
+3. Set the Eshop project as the startup project
+4. Run the application
+5. Open Swagger UI in the browser (http://localhost:{port}/swagger)
+6. (Optional) Initialize the Database - This step is required when the application is configured to use the SQL Server database  
+(`"UseMockRepository": false`). Open Package Manager Console and run:
+   ```
+   Update-Database
+   ```
+This command will:
+create the database if it does not exist
+apply all Entity Framework Core migrations
+insert initial seed data
+Wait until the command finishes without errors.
 
 ---
+
 
 ## Database
 - Database: **EshopDb**
